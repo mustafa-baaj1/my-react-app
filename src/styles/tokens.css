@@ -1,0 +1,47 @@
+:root {
+  --color-primary: #635bff;
+  --color-primary-dark: #4438ca;
+  --color-primary-light: #c7d2fe;
+  --color-primary-soft: #eef2ff;
+  --color-secondary: #0f766e;
+  --color-accent: #f59e0b;
+  --color-heading: #172033;
+  --color-text: #2e3a50;
+  --color-text-muted: #647087;
+  --color-text-subtle: #8791a3;
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-border: #e6eaf0;
+  --color-border-strong: #d3d9e3;
+  --color-focus: #f59e0b;
+  --color-white: #ffffff;
+  --color-dark: #111827;
+
+  --font-family-arabic: Tahoma, Arial, 'Segoe UI', sans-serif;
+  --font-size-base: 16px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  --radius-sm: 0.55rem;
+  --radius-md: 0.85rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-pill: 999px;
+
+  --shadow-primary: 0 12px 28px rgba(99, 91, 255, 0.2);
+  --shadow-sm: 0 4px 16px rgba(25, 34, 55, 0.06);
+  --shadow-md: 0 16px 40px rgba(25, 34, 55, 0.09);
+  --shadow-lg: 0 28px 70px rgba(25, 34, 55, 0.14);
+  --container-width: 1180px;
+  --transition-fast: 180ms ease;
+}
