@@ -1,4 +1,10 @@
+const demoVideoUrls = [
+  'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+]
+
 function createSections(courseId, sectionGroups) {
+  const courseVideoOffset = [...courseId].reduce((total, character) => total + character.charCodeAt(0), 0)
+
   return sectionGroups.map((section, sectionIndex) => {
     const expandedLessons = [
       ...section.lessons,
@@ -14,6 +20,7 @@ function createSections(courseId, sectionGroups) {
         title,
         duration,
         type,
+        videoUrl: demoVideoUrls[(courseVideoOffset + sectionIndex * expandedLessons.length + lessonIndex) % demoVideoUrls.length],
         isPreview: sectionIndex === 0 && lessonIndex === 0,
       })),
     }
