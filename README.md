@@ -1,147 +1,118 @@
 # Learnova
 
-Learnova is a portfolio-ready Arabic online learning platform built with React and Vite. The entire learner experience is designed for right-to-left use and includes course discovery, demo authentication, enrollment, lesson navigation, progress tracking, and a personal learning dashboard.
+An Arabic RTL learning-platform demonstration built with React and Vite. Learnova brings together course discovery, demo authentication, enrollment, and a lesson workspace with browser-local progress tracking.
+
+This is a frontend portfolio project. It uses DummyJSON for authentication demonstrations and browser storage for local accounts, enrollment, and learning progress; it has no custom production backend.
 
 ## Features
 
-- Premium Arabic RTL landing page with categories, featured courses, statistics, testimonials, and calls to action.
-- Course catalog with real-time Arabic search, category and level filters, sorting, URL-persisted catalog state, and responsive cards.
-- Course details with curriculum accordions, outcomes, requirements, instructor information, related courses, and enrollment actions.
-- DummyJSON login and current-user validation, plus local demo registration when persistent remote registration is unavailable.
-- Protected routes that return learners to their originally requested page after login.
-- Per-user course enrollment with duplicate prevention.
-- Learning workspace with lesson routing, curriculum navigation, video placeholders, previous/next controls, completion tracking, and course completion states.
-- My Courses page with real progress and resume links.
-- Profile dashboard with learning statistics, recent activity, enrolled-course journey, and local display-name editing for demo users.
-- Loading, error, empty, success, disabled, and not-authorized states across the application.
-- Responsive layouts for desktop, tablet, and mobile, with keyboard and reduced-motion support.
+- Arabic right-to-left interface with responsive desktop, tablet, and mobile layouts.
+- Course search, category/level filters, and sorting persisted in URL query parameters.
+- Course details with curriculum, outcomes, requirements, instructor information, and related courses.
+- Authentication Context, reusable auth fields, validation, and loading/error states.
+- Protected routes that return users to their intended page after login.
+- Per-user enrollment with duplicate prevention in browser storage.
+- Lesson navigation, completion tracking, resume links, and a My Courses dashboard.
+- Profile summaries derived from local enrollment/progress data and local demo display-name editing.
+- Reusable components, shared CSS tokens, keyboard interactions, and reduced-motion styles.
 
-## Technologies
+## Technology stack
 
-- React 19
-- React Router
-- Axios
-- Vite
-- Context API
-- LocalStorage
-- Modern responsive CSS with shared design tokens
-- ESLint
+React 19 · JavaScript · React Router 7 · Context API · Axios · Vite · custom responsive CSS · LocalStorage · ESLint
 
-No backend or external UI component library is used.
+The UI does not depend on Tailwind CSS, Bootstrap, or an external component library.
 
 ## Architecture
 
 ```text
 src/
-├── components/        Reusable layout, course, auth, learning, profile, and home UI
-├── context/           Authentication state and actions
-├── data/              Single local course dataset
-├── hooks/             Shared React hooks
-├── pages/             Route-level page composition and styles
-├── routes/            Application route definitions and protection
-├── services/          API, auth, enrollment, progress, profile, and storage logic
-├── styles/            Global styles, design tokens, and auth styles
-└── utils/             Catalog, validation, and redirect helpers
+├── components/   Reusable layout, course, auth, learning, and profile UI
+├── context/      Authentication state and actions
+├── data/         Local course dataset
+├── hooks/        Shared React hooks
+├── pages/        Route-level pages and styles
+├── routes/       Routes and access guards
+├── services/     API, authentication, enrollment, progress, and storage
+├── styles/       Shared styles and design tokens
+└── utils/        Catalog, validation, and navigation helpers
 ```
-
-The principal data flow is:
 
 ```text
-Pages and components → contexts/services → storage or Axios API → DummyJSON
+Pages/components → Auth Context / services
+                              ├── Axios → DummyJSON (demo identity)
+                              ├── courseService → local course dataset
+                              └── storage services → LocalStorage
 ```
 
-Course records are defined only in `src/data/courses.js`. UI components use `courseService.js` rather than maintaining separate datasets.
+Course records originate in `src/data/courses.js`; components access them through `courseService.js`.
 
-## API strategy
+## Authentication demonstration
 
-DummyJSON is used only for authentication and user-related demo behavior through the shared Axios instance.
-
-Endpoints used:
-
-- `POST /auth/login` — authenticate an existing DummyJSON user.
-- `GET /auth/me` — validate and restore a remote authenticated session.
-- `GET /users/filter` — resolve an email address to a DummyJSON username.
-- `POST /users/add` — simulate account creation before saving a local demo account.
-
-Courses, enrollments, and learning progress do not use DummyJSON.
-
-## Authentication behavior
-
-- Remote demo sessions are restored through `/auth/me` when possible.
-- Registration creates a demo-compatible local account because DummyJSON does not persist newly created users.
-- Local demo passwords are stored as salted SHA-256 hashes rather than plaintext.
-- Logging out clears the active session and returns to the home page.
-- `/my-courses`, `/profile`, and all `/learn/*` routes require authentication.
-- Learning routes additionally require enrollment in the requested course.
-
-DummyJSON demo credentials:
-
-```text
-Username: emilys
-Password: emilyspass
-```
-
-## Local storage strategy
-
-All browser storage access is centralized in the service layer.
-
-| Key | Purpose |
+| Endpoint | Role in the demonstration |
 | --- | --- |
-| `coursePlatform.auth` | Current authenticated user and access token |
-| `coursePlatform.localUsers` | Locally registered demo accounts and password hashes |
+| `POST /auth/login` | Sign in with an existing DummyJSON demo account |
+| `GET /auth/me` | Validate and restore a remote session |
+| `GET /users/filter` | Resolve an email address to a demo username |
+| `POST /users/add` | Simulate registration before saving a local demo account |
+
+DummyJSON does not persist newly added users. After a successful registration request, Learnova keeps a local demo account on the current browser/device. Local passwords are stored as salted SHA-256 hashes, not plaintext; this remains a demonstration rather than production password storage. Use disposable demo credentials, not personal passwords.
+
+Remote sessions are checked through `/auth/me`. Local demo sessions use locally stored users. If remote restoration encounters a network failure without an HTTP response, the current implementation retains the stored demo session.
+
+`/my-courses`, `/profile`, and `/learn/*` require authentication. Learning routes also check local course enrollment. These are client-side navigation guards, not server-side authorization.
+
+## Browser-local data
+
+| Storage key | Contents |
+| --- | --- |
+| `coursePlatform.auth` | Current user and access token |
+| `coursePlatform.localUsers` | Local demo accounts, salts, and password hashes |
 | `coursePlatform.enrollments` | Per-user course enrollment records |
-| `coursePlatform.learningProgress` | Per-user, per-course completed lessons and last visited lesson |
+| `coursePlatform.learningProgress` | Completed lesson IDs and last visited lesson per user/course |
 
-Clearing browser site data removes local accounts, enrollment records, and learning progress.
+Clearing site data removes local accounts, enrollments, and progress. Data does not synchronize between browsers or devices. Courses, enrollment, and progress are not fetched from DummyJSON.
 
-## Installation
+## Local installation
 
-Requirements: a current Node.js LTS release and npm.
+**Setup status:** commands and runtime requirements were checked against the manifests/lockfile, but were not executed in a clean environment during this documentation pass.
+
+Requirements: Node.js 22.13+ within the 22.x line, or Node.js 24+, and npm. These choices satisfy the checked Vite and ESLint engine requirements.
 
 ```bash
-npm install
+git clone https://github.com/mustafa-baaj1/my-react-app.git
+cd my-react-app
+npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite.
+Open the URL printed by Vite. The checked demo requires no environment variables or private API key; network access to DummyJSON is needed for its remote authentication flow.
 
 ## Development commands
 
 ```bash
-npm run dev      # Start the Vite development server
-npm run lint     # Run ESLint across the project
-npm run build    # Create a production bundle in dist/
-npm run preview  # Preview the production bundle locally
+npm run dev      # Development server
+npm run lint     # ESLint
+npm run build    # Bundle into dist/
+npm run preview  # Local preview of the bundle
 ```
 
-## Production build and deployment
+No automated test suite is configured. No lint/build pass or test coverage is claimed in this documentation update.
 
-Create the deployable bundle with:
+## Static hosting configuration
 
-```bash
-npm run build
-```
+The build output is `dist/`. Browser-history routes need a host fallback to `index.html` for application paths. The repository includes `public/_redirects` and `vercel.json` for compatible hosting configurations. These files do not establish that a live deployment exists; no deployment URL is claimed.
 
-Deploy the generated `dist` directory to a static host. Because Learnova uses browser-history routes, the host must return `index.html` for unknown application paths.
+## Screenshots
 
-This repository includes:
-
-- `public/_redirects` for Netlify and compatible static hosts.
-- `vercel.json` for Vercel SPA rewrites.
-
-For other providers, configure an equivalent fallback such as `/* → /index.html` with a successful response status.
-
-## Environment and secrets
-
-The demo uses no environment variables and contains no private API keys. `.env` files are ignored to prevent accidental secret commits. DummyJSON is a public demonstration API.
+Genuine project screenshots have not yet been added. Planned captures: desktop course catalog with filters, mobile RTL layout, course details, and learning-progress workspace. Use disposable demo accounts and avoid exposing stored tokens or personal information.
 
 ## Demo limitations
 
-- This is a frontend-only portfolio project; it has no production backend or server-side authorization.
-- Remote authentication depends on DummyJSON availability and its demo users.
-- Locally registered users exist only in the current browser and device.
-- Tokens and demo data are kept in LocalStorage, which is suitable for this demonstration but not a production security model.
-- Course videos are professional placeholders; no streaming provider is integrated.
-- Favorites are session-only UI feedback and are not persisted.
-- Progress and recent activity are device-local. Activity uses enrollment and latest course-progress timestamps rather than a full event log.
-- Static hosts require the included or equivalent SPA fallback configuration for direct route refreshes.
+- No production backend, server-enforced access control, or cross-device persistence.
+- DummyJSON availability and demo-account behavior affect remote authentication.
+- LocalStorage tokens/accounts are for demonstration, not a production security architecture.
+- Course videos are placeholders; no streaming integration is implemented.
+- Favorites provide session-only UI feedback and are not persisted.
+- Recent activity derives from enrollment and latest progress timestamps, not a complete event log.
+- Landing-page statistics/testimonials are demonstration content, not verified usage metrics.
+- Responsive and accessibility behavior still benefits from browser and assistive-technology testing.
