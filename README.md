@@ -104,7 +104,30 @@ The build output is `dist/`. Browser-history routes need a host fallback to `ind
 
 ## Screenshots
 
-Genuine project screenshots have not yet been added. Planned captures: desktop course catalog with filters, mobile RTL layout, course details, and learning-progress workspace. Use disposable demo accounts and avoid exposing stored tokens or personal information.
+Genuine captures of the Arabic RTL interface. The screenshots use demonstration content: course ratings, prices, and landing-page counters are illustrative, not verified usage metrics. Enrollment and progress shown here are browser-local demo state.
+
+**Homepage** — the main landing-page layout and RTL navigation.
+
+[![Learnova Arabic RTL homepage](docs/screenshots/homepage.png)](docs/screenshots/homepage.png)
+
+<details>
+<summary>View course catalog, course details, and learning progress</summary>
+
+**Course catalog** — search, category/level filters, and sorting controls.
+
+[![Learnova course catalog and filtering controls](docs/screenshots/course-catalog.png)](docs/screenshots/course-catalog.png)
+
+**Course details** — course overview, outcomes, and enrollment action.
+
+[![Learnova course details page](docs/screenshots/course-details.png)](docs/screenshots/course-details.png)
+
+**My Courses** — enrolled-course cards and browser-local progress states.
+
+[![Learnova enrolled courses and browser-local progress](docs/screenshots/learning-progress.png)](docs/screenshots/learning-progress.png)
+
+</details>
+
+Select an image to view the original-resolution capture. These screenshots demonstrate the frontend interface, not a custom production backend.
 
 ## Demo limitations
 
